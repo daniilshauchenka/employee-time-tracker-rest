@@ -10,28 +10,20 @@ public class RestController extends HttpServlet {
 
     private final CommandProvider provider = new CommandProvider();
 
-    public void init() {
-
-    }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         provider.getCommand(request.getParameter("command")).execute(request, response);
+    }
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     }
 
-    public void doPost (HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     }
 
-    public void doPut (HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     }
-    public void doDelete (HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-    }
-
-    public void destroy() {
-    }
-
-
 }
