@@ -11,14 +11,14 @@ public class CommandProvider {
     private final static String UNDEFINED = "";
 
     //Employee request parameters
-    private final static String EMPLOYEES_LIST = "employeesList";
+    private final static String EMPLOYEE_LIST = "employeeList";
     private final static String EMPLOYEE = "employee";
     private final static String EMPLOYEE_ADD = "addEmployee";
     private final static String EMPLOYEE_EDIT = "editEmployee";
     private final static String EMPLOYEE_DELETE = "deleteEmployee";
 
     //Task request parameters
-    private final static String TASKS_LIST = "tasksList";
+    private final static String TASK_LIST = "taskList";
     private final static String TASK = "task";
     private final static String TASK_ADD = "addTask";
     private final static String TASK_EDIT = "editTask";
@@ -35,14 +35,14 @@ public class CommandProvider {
     public CommandProvider() {
         commands.put(UNDEFINED, new Undefined());
 
-        commands.put(EMPLOYEES_LIST, new GetEmployeesList());
+        commands.put(EMPLOYEE_LIST, new GetEmployeesList());
         commands.put(EMPLOYEE, new GetSingleEmployee());
         commands.put(EMPLOYEE_ADD, new AddEmployee());
         commands.put(EMPLOYEE_EDIT, new EditEmployee());
         commands.put(EMPLOYEE_DELETE, new DeleteEmployee());
 
         //todo create classes for each command, do the implementation
-        commands.put(TASKS_LIST, new Undefined());
+        commands.put(TASK_LIST, new Undefined());
         commands.put(TASK, new Undefined());
         commands.put(TASK_ADD, new Undefined());
         commands.put(TASK_EDIT, new Undefined());
@@ -60,13 +60,6 @@ public class CommandProvider {
         Command command = commands.getOrDefault(name, (request, response) -> commands.get(UNDEFINED));
         System.out.println("got command " + command );
         return command.isAllowedFor(method) ? command : commands.get(UNDEFINED);
-
-//        if (command.isAllowedFor(method)) {
-//            return command;
-//        }
-//        else {
-//          return  commands.get(UNDEFINED);
-//        }
     }
 
 }
