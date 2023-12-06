@@ -35,7 +35,7 @@ public class CommandProvider {
     public CommandProvider() {
         commands.put(UNDEFINED, new Undefined());
 
-        commands.put(EMPLOYEE_LIST, new GetEmployeesList());
+        commands.put(EMPLOYEE_LIST, new GetEmployeeList());
         commands.put(EMPLOYEE, new GetSingleEmployee());
         commands.put(EMPLOYEE_ADD, new AddEmployee());
         commands.put(EMPLOYEE_EDIT, new EditEmployee());
