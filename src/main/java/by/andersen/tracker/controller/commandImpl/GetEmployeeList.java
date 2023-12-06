@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GetEmployeesList implements Command {
+public class GetEmployeeList implements Command {
     private final IEmployeeService employeeService = ServiceProvider.getInstance().getEmployeeService();
 
     @Override
