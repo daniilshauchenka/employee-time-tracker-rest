@@ -33,6 +33,7 @@ public interface Command {
                 method == HttpMethod.GET;
     }
 
+
 //  todo need to discuss such solution (using only one ObjectMapper for whole application)
 
 //    default void sendResponse(HttpServletResponse response, Map<String, Object> data, int status) throws IOException {
