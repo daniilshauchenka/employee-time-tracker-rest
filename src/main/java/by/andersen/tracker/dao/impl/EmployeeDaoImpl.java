@@ -15,6 +15,18 @@ public class EmployeeDaoImpl implements IEmployeeDao {
 
     @Override
     public void add(Employee employee) throws DaoException {
+        Transaction transaction = null;
+        try (Session session = HibernateConfig.getSession()) {
+            transaction = session.beginTransaction();
+            session.save(employee);
+            transaction.commit();
+        } catch (HibernateException ex) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new DaoException(ex);
+        }
+
 
     }
 
