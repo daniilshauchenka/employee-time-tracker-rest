@@ -8,6 +8,7 @@ import by.andersen.tracker.model.Task;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.util.List;
 
@@ -46,15 +47,14 @@ public class TaskDaoImpl implements ITaskDao {
 
     @Override
     public void delete(int id) throws DaoException {
-        Transaction transaction = null;
+        System.err.println("\n\n\nDELETING====\n\n\n");
         try (Session session = HibernateConfig.getSession()) {
-            transaction = session.beginTransaction();
-            session.delete(id);
-            transaction.commit();
+            session.beginTransaction();
+            Query query = session.createQuery("UPDATE Task t SET t.isDeleted = true WHERE t.id = :deletingId");
+            query.setParameter("deletingId", id);
+            int rowCount = query.executeUpdate();
+            session.getTransaction().commit();
         } catch (HibernateException ex) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
             throw new DaoException(ex);
         }
 
