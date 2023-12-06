@@ -17,6 +17,9 @@ public class Task {
     @Column(name = "name")
     private String name;
 
+    @Column(name="deleted")
+    private boolean isDeleted;
+
     public Task(int id, String description, String name) {
         this.id = id;
         this.description = description;
@@ -28,6 +31,14 @@ public class Task {
 
     public int getId() {
         return id;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     public void setId(int id) {
@@ -69,6 +80,7 @@ public class Task {
                 "id=" + id +
                 ", description='" + description + '\'' +
                 ", name='" + name + '\'' +
+                ", isDeleted=" + isDeleted +
                 '}';
     }
 }

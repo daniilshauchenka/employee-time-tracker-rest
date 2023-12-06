@@ -17,6 +17,7 @@ public class EmployeeDaoImpl implements IEmployeeDao {
 
     @Override
     public void add(Employee employee) throws DaoException {
+
         try (Session session = HibernateConfig.getSession()) {
             session.beginTransaction();
 
