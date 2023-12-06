@@ -22,15 +22,39 @@ public class Employee {
     @Column(name = "password")
     private String password;
 
+    @Column(name="deleted")
+    private boolean isDeleted;
+
     public Employee() {
     }
 
-    public Employee(int id, String name, String surname, String login, String password) {
+    public Employee(int id, String name, String surname, String login, String password, boolean isDeleted) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.login = login;
         this.password = password;
+        this.isDeleted = isDeleted;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", isDeleted=" + isDeleted +
+                '}';
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     public int getId() {
@@ -86,14 +110,4 @@ public class Employee {
         return Objects.hash(id, name, surname, login, password);
     }
 
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                '}';
-    }
 }
