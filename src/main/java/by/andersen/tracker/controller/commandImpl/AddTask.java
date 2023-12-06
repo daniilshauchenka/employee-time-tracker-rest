@@ -2,36 +2,36 @@ package by.andersen.tracker.controller.commandImpl;
 
 import by.andersen.tracker.controller.Command;
 import by.andersen.tracker.controller.HttpMethod;
-import by.andersen.tracker.service.IEmployeeService;
+import by.andersen.tracker.model.Task;
+import by.andersen.tracker.service.ITaskService;
 import by.andersen.tracker.service.ServiceProvider;
 import by.andersen.tracker.service.exception.ServiceException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GetEmployeesList implements Command {
-    private final IEmployeeService employeeService = ServiceProvider.getInstance().getEmployeeService();
+public class AddTask implements Command {
+    private final ITaskService taskService = ServiceProvider.getInstance().getTaskService();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map<String, Object> data = new HashMap<>();
-        data.put("message", "this is get list of employees!");
+        data.put("message", "this is add task!");
+        ObjectMapper objectMapper = new ObjectMapper();
+        Task task = objectMapper.readValue(request.getInputStream(), Task.class);
 
         try {
-            data.put("employeeList", employeeService.getList(100, 0));
+            taskService.add(task);
         } catch (ServiceException ex) {
             handleError(response, data, 500, ex);
             return;
         }
 
         data.put("success", true);
-        ObjectMapper objectMapper = new ObjectMapper();
         String jsonData = objectMapper.writeValueAsString(data);
         response.getWriter().write(jsonData);
         response.setContentType("application/json");
@@ -41,6 +41,6 @@ public class GetEmployeesList implements Command {
 
     @Override
     public boolean isAllowedFor(HttpMethod method) {
-        return method == HttpMethod.GET;
+        return method == HttpMethod.POST;
     }
 }
