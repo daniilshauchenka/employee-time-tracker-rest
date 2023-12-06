@@ -26,7 +26,7 @@ public class AddEmployee implements Command {
         Employee employee = objectMapper.readValue(request.getInputStream(), Employee.class);
 
         try {
-            employeeService.addEmployee(employee);
+            employeeService.add(employee);
         } catch (ServiceException ex) {
             handleError(response, data, 500, ex);
             return;

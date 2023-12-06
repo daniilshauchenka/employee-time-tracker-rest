@@ -26,7 +26,7 @@ public class EditEmployee implements Command {
         Employee employee = objectMapper.readValue(request.getInputStream(), Employee.class);
 
         try {
-            employeeService.editEmployee(employee);
+            employeeService.edit(employee);
         } catch (ServiceException ex) {
             handleError(response, data, 500, ex);
             return;

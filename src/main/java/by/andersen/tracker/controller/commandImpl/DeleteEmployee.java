@@ -32,7 +32,7 @@ public class DeleteEmployee implements Command {
         }
 
         try {
-            employeeService.deleteEmployee(id);
+            employeeService.delete(id);
         } catch (ServiceException ex) {
             handleError(response, data, 500, ex);
             return;
