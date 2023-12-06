@@ -42,6 +42,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Override
     public Employee getById(int id) throws ServiceException {
         try {
+            System.out.println("get by id service " + id);
             return employeeDao.getById(id);
         } catch (DaoException ex) {
             throw new ServiceException(ex);

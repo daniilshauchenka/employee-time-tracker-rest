@@ -31,7 +31,7 @@ public class GetSingleEmployee implements Command {
             handleError(response, data, 400, ex);
             return;
         }
-
+        System.out.println("exec get employee");
         try {
             data.put("employee", employeeService.getById(id));
         } catch (ServiceException ex) {
