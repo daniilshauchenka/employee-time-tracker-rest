@@ -11,6 +11,7 @@ import javax.servlet.annotation.*;
 public class RestController extends HttpServlet {
 
     private final CommandProvider provider = new CommandProvider();
+
     //todo
     //idk if that is okay to use one object mapper for whole application and pass it through all commands
     //  private ObjectMapper objectMapper;
@@ -20,22 +21,24 @@ public class RestController extends HttpServlet {
 //    }
 //
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        processRequest(request, response);
+
+        processRequest(request, response, HttpMethod.GET);
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        processRequest(request, response);
+        processRequest(request, response, HttpMethod.POST);
     }
 
     public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        processRequest(request, response);
+        processRequest(request, response, HttpMethod.PUT);
     }
 
     public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        processRequest(request, response);
+        processRequest(request, response, HttpMethod.DELETE);
     }
 
-    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        provider.getCommand(request.getParameter("command")).execute(request, response);
+    //universal method for every coming http method
+    private void processRequest(HttpServletRequest request, HttpServletResponse response, HttpMethod method) throws IOException {
+        provider.getCommand(request.getParameter("command"), method).execute(request, response);
     }
 }

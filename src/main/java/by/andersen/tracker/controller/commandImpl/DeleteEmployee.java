@@ -1,6 +1,7 @@
 package by.andersen.tracker.controller.commandImpl;
 
 import by.andersen.tracker.controller.Command;
+import by.andersen.tracker.controller.HttpMethod;
 import by.andersen.tracker.model.Employee;
 import by.andersen.tracker.service.IEmployeeService;
 import by.andersen.tracker.service.ServiceProvider;
@@ -20,7 +21,7 @@ public class DeleteEmployee implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map<String, Object> data = new HashMap<>();
-        data.put("message", "this is get single employee!");
+        data.put("message", "this is delete employee!");
 
         int id;
         try {
@@ -44,5 +45,10 @@ public class DeleteEmployee implements Command {
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(jsonData);
         response.setStatus(HttpServletResponse.SC_OK);
+    }
+
+    @Override
+    public boolean isAllowedFor(HttpMethod method) {
+        return method == HttpMethod.DELETE;
     }
 }

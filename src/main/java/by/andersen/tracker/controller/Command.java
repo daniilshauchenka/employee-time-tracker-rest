@@ -16,13 +16,21 @@ public interface Command {
     default void handleError(HttpServletResponse response, Map<String, Object> data, int status, Exception ex) throws IOException {
         ex.printStackTrace(); //todo remove print
         data.put("success", false);
-        data.put("error", ex.getClass() +" | Caused by: " + ex.getCause() + " | Message: " + ex.getMessage());
+        data.put("error", ex.getClass() + " | Caused by: " + ex.getCause() + " | Message: " + ex.getMessage());
         response.setStatus(status);
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonData = objectMapper.writeValueAsString(data);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(jsonData);
+    }
+
+    //checks if this command is available for this method
+    default boolean isAllowedFor(HttpMethod method) {
+        return method == HttpMethod.DELETE |
+                method == HttpMethod.PUT |
+                method == HttpMethod.POST |
+                method == HttpMethod.GET;
     }
 
 //  todo need to discuss such solution (using only one ObjectMapper for whole application)

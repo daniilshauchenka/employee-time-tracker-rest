@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class Undefined implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        System.out.println("undefined");
         Map<String, Object> data = new HashMap<>();
         data.put("message", "command not found!");
         ObjectMapper objectMapper = new ObjectMapper();

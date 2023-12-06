@@ -1,6 +1,7 @@
 package by.andersen.tracker.controller.commandImpl;
 
 import by.andersen.tracker.controller.Command;
+import by.andersen.tracker.controller.HttpMethod;
 import by.andersen.tracker.model.Employee;
 import by.andersen.tracker.service.IEmployeeService;
 import by.andersen.tracker.service.ServiceProvider;
@@ -45,5 +46,10 @@ public class GetSingleEmployee implements Command {
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(jsonData);
         response.setStatus(HttpServletResponse.SC_OK);
+    }
+
+    @Override
+    public boolean isAllowedFor(HttpMethod method) {
+        return method == HttpMethod.GET;
     }
 }

@@ -55,7 +55,18 @@ public class CommandProvider {
         commands.put(TIME_DELETE, new Undefined());
     }
 
-    public Command getCommand(String name) {
-        return commands.getOrDefault(name, (request, response) -> commands.get(UNDEFINED).execute(request, response));
+    public Command getCommand(String name, HttpMethod method) {
+        System.out.println("getting command" );
+        Command command = commands.getOrDefault(name, (request, response) -> commands.get(UNDEFINED));
+        System.out.println("got command " + command );
+        return command.isAllowedFor(method) ? command : commands.get(UNDEFINED);
+
+//        if (command.isAllowedFor(method)) {
+//            return command;
+//        }
+//        else {
+//          return  commands.get(UNDEFINED);
+//        }
     }
+
 }
