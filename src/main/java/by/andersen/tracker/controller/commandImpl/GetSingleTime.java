@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GetTimeById implements Command {
+public class GetSingleTime implements Command {
 
     private final ITimeService timeService = ServiceProvider.getInstance().getTimeService();
 
