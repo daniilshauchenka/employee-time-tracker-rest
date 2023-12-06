@@ -32,6 +32,9 @@ public class Time {
     @Column(name = "comment")
     private String comment;
 
+    @Column(name = "isDeleted")
+    private boolean isDeleted;
+
     public Time(int id, Employee employee, Task task, int timeSpent, LocalDateTime timeStart, LocalDateTime timeEnd, String comment) {
         this.id = id;
         this.employee = employee;
