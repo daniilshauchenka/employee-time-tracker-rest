@@ -35,24 +35,23 @@ public class CommandProvider {
     public CommandProvider() {
         commands.put(UNDEFINED, new Undefined());
 
-        commands.put(EMPLOYEE_LIST, new GetEmployeesList());
+        commands.put(EMPLOYEE_LIST, new GetEmployeeList());
         commands.put(EMPLOYEE, new GetSingleEmployee());
         commands.put(EMPLOYEE_ADD, new AddEmployee());
         commands.put(EMPLOYEE_EDIT, new EditEmployee());
         commands.put(EMPLOYEE_DELETE, new DeleteEmployee());
 
-        //todo create classes for each command, do the implementation
-        commands.put(TASK_LIST, new Undefined());
-        commands.put(TASK, new Undefined());
-        commands.put(TASK_ADD, new Undefined());
-        commands.put(TASK_EDIT, new Undefined());
-        commands.put(TASK_DELETE, new Undefined());
+        commands.put(TASK_LIST, new GetTaskList());
+        commands.put(TASK, new GetSingleTask());
+        commands.put(TASK_ADD, new AddTask());
+        commands.put(TASK_EDIT, new EditTask());
+        commands.put(TASK_DELETE, new DeleteTask());
 
-        commands.put(TIME_LIST, new Undefined());
-        commands.put(TIME, new Undefined());
-        commands.put(TIME_ADD, new Undefined());
-        commands.put(TIME_EDIT, new Undefined());
-        commands.put(TIME_DELETE, new Undefined());
+        commands.put(TIME_LIST, new GetTimeList());
+        commands.put(TIME, new GetSingleTime());
+        commands.put(TIME_ADD, new AddTime());
+        commands.put(TIME_EDIT, new EditTime());
+        commands.put(TIME_DELETE, new DeleteTime());
     }
 
     public Command getCommand(String name, HttpMethod method) {
