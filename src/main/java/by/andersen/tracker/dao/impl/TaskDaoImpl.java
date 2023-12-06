@@ -31,11 +31,32 @@ public class TaskDaoImpl implements ITaskDao {
 
     @Override
     public void edit(Task task) throws DaoException {
-
+        Transaction transaction = null;
+        try (Session session = HibernateConfig.getSession()) {
+            transaction = session.beginTransaction();
+            session.update(task);
+            transaction.commit();
+        } catch (HibernateException ex) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new DaoException(ex);
+        }
     }
 
     @Override
     public void delete(int id) throws DaoException {
+        Transaction transaction = null;
+        try (Session session = HibernateConfig.getSession()) {
+            transaction = session.beginTransaction();
+            session.delete(id);
+            transaction.commit();
+        } catch (HibernateException ex) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new DaoException(ex);
+        }
 
     }
 
