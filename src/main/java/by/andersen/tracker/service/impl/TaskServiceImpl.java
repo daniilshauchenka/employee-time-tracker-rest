@@ -7,31 +7,33 @@ import by.andersen.tracker.model.Task;
 import by.andersen.tracker.service.ITaskService;
 import by.andersen.tracker.service.exception.ServiceException;
 
+import java.util.List;
+
 public class TaskServiceImpl implements ITaskService {
     ITaskDao taskDao = DaoProvider.getInstance().getTaskDao();
 
     @Override
-    public void addTask(Task task) throws ServiceException {
+    public void add(Task task) throws ServiceException {
         try {
-            taskDao.addTask(task);
+            taskDao.add(task);
         } catch (DaoException ex) {
             throw new ServiceException(ex);
         }
     }
 
     @Override
-    public void editTask(Task task) throws ServiceException {
+    public void edit(Task task) throws ServiceException {
         try {
-            taskDao.editTask(task);
+            taskDao.edit(task);
         } catch (DaoException ex) {
             throw new ServiceException(ex);
         }
     }
 
     @Override
-    public void deleteTask(int id) throws ServiceException {
+    public void delete(int id) throws ServiceException {
         try {
-            taskDao.deleteTask(id);
+            taskDao.delete(id);
         } catch (DaoException ex) {
             throw new ServiceException(ex);
         }
@@ -39,6 +41,19 @@ public class TaskServiceImpl implements ITaskService {
 
     @Override
     public Task getById(int id) throws ServiceException {
-        return null;
+        try {
+            return taskDao.getById(id);
+        } catch (DaoException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public List<Task> getList(int limit, int offset) throws ServiceException {
+        try {
+            return taskDao.getList(limit, offset);
+        } catch (DaoException ex) {
+            throw new ServiceException(ex);
+        }
     }
 }

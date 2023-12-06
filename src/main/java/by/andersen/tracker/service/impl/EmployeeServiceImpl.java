@@ -13,27 +13,27 @@ public class EmployeeServiceImpl implements IEmployeeService {
     IEmployeeDao employeeDao = DaoProvider.getInstance().getEmployeeDao();
 
     @Override
-    public void addEmployee(Employee employee) throws ServiceException {
+    public void add(Employee employee) throws ServiceException {
         try {
-            employeeDao.addEmployee(employee);
+            employeeDao.add(employee);
         } catch (DaoException ex) {
             throw new ServiceException(ex);
         }
     }
 
     @Override
-    public void editEmployee(Employee employee) throws ServiceException {
+    public void edit(Employee employee) throws ServiceException {
         try {
-            employeeDao.editEmployee(employee);
+            employeeDao.edit(employee);
         } catch (DaoException ex) {
             throw new ServiceException(ex);
         }
     }
 
     @Override
-    public void deleteEmployee(int id) throws ServiceException {
+    public void delete(int id) throws ServiceException {
         try {
-            employeeDao.deleteEmployee(id);
+            employeeDao.delete(id);
         } catch (DaoException ex) {
             throw new ServiceException(ex);
         }
@@ -51,7 +51,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Override
     public List<Employee> getList(int limit, int offset) throws ServiceException {
         try {
-            return employeeDao.getList(limit,offset);
+            return employeeDao.getList(limit, offset);
         } catch (DaoException ex) {
             throw new ServiceException(ex);
         }

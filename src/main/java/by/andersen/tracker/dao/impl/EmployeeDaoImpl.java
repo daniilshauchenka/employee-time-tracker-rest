@@ -7,18 +7,19 @@ import by.andersen.tracker.model.Employee;
 import java.util.List;
 
 public class EmployeeDaoImpl implements IEmployeeDao {
+
     @Override
-    public void addEmployee(Employee employee) throws DaoException {
+    public void add(Employee employee) throws DaoException {
 
     }
 
     @Override
-    public void editEmployee(Employee employee) throws DaoException {
+    public void edit(Employee employee) throws DaoException {
 
     }
 
     @Override
-    public void deleteEmployee(int id) throws DaoException {
+    public void delete(int id) throws DaoException {
 
     }
 

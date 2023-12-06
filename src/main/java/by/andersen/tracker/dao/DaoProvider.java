@@ -15,10 +15,7 @@ public class DaoProvider {
 
     private final IEmployeeDao employeeDao = new EmployeeDaoImpl();
     private final ITaskDao taskDao = new TaskDaoImpl();
-
     private final ITimeDao timeDao = new TimeDaoImpl();
-
-
 
     public ITaskDao getTaskDao() {
         return taskDao;
