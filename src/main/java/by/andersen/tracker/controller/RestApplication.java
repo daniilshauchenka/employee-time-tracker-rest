@@ -1,4 +1,4 @@
-package by.andersen.tracker;
+package by.andersen.tracker.controller;
 
 import javax.ws.rs.ApplicationPath;
 
