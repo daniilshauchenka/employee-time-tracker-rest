@@ -53,10 +53,9 @@ public class EmployeeDaoImpl implements IEmployeeDao {
 
     @Override
     public void delete(int id) throws DaoException {
-        System.err.println("\n\n\nDELETING====\n\n\n");
         try (Session session = HibernateConfig.getSession()) {
             session.beginTransaction();
-            Query query = session.createQuery("UPDATE Employee e SET e.isDeleted = true WHERE e.id = :deletingId");
+            Query<Employee> query = session.createQuery("UPDATE Employee e SET e.isDeleted = true WHERE e.id = :deletingId", Employee.class);
             query.setParameter("deletingId", id);
             int rowCount = query.executeUpdate();
             session.getTransaction().commit();
@@ -67,7 +66,7 @@ public class EmployeeDaoImpl implements IEmployeeDao {
 
     @Override
     public Employee getById(int id) throws DaoException {
-        Employee employee = null;
+        Employee employee;
         Transaction transaction = null;
         try (Session session = HibernateConfig.getSession()) {
             transaction = session.beginTransaction();
@@ -84,6 +83,7 @@ public class EmployeeDaoImpl implements IEmployeeDao {
 
     @Override
     public List<Employee> getList(int limit, int offset) throws DaoException {
+        System.out.println("get employee list");
         List<Employee> list = new ArrayList<Employee>();
         try (Session session = HibernateConfig.getSession()) {
 

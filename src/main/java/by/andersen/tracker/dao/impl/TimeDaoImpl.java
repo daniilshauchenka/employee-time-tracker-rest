@@ -38,7 +38,7 @@ public class TimeDaoImpl implements ITimeDao {
     public void delete(int id) throws DaoException {
         try (Session session = HibernateConfig.getSession()) {
             session.beginTransaction();
-            Query query = session.createQuery("UPDATE  Time t set t.isDeleted = true where  t.id = :id");
+            Query<Time> query = session.createQuery("UPDATE  Time t set t.isDeleted = true where  t.id = :id", Time.class);
             query.setParameter("id",id);
             query.executeUpdate();
             session.getTransaction().commit();
@@ -62,11 +62,16 @@ public class TimeDaoImpl implements ITimeDao {
 
     @Override
     public List<Time> getList(int limit, int offset) throws DaoException {
+        System.out.println("get time list");
+        List<Time> list;
         try (Session session = HibernateConfig.getSession()) {
-            Query query = session.createQuery("from Time t where t.isDeleted=false");
-            return (List<Time>) query.getResultList();
+            Query<Time> query = session.createQuery("from Time t where t.isDeleted=false ORDER BY t.timeStart DESC ", Time.class);
+            query.setFirstResult(offset);
+            query.setMaxResults(limit);
+            list = query.getResultList();
         } catch (HibernateException ex) {
             throw new DaoException(ex);
         }
+        return list;
     }
 }

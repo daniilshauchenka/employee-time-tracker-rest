@@ -12,30 +12,25 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DeleteEmployee implements Command {
-
+public class GetEmployee implements Command {
     private final IEmployeeService employeeService = ServiceProvider.getInstance().getEmployeeService();
 
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map<String, Object> data = new HashMap<>();
-        data.put("message", "this is delete employee!");
+        data.put("message", "this is get single employee!");
 
         Integer id = getIdFromPath(request.getPathInfo());
 
         if (id == null || id < 0) {
-            handleError(response, data, 400, new Exception("Invalid employee id"));
-            return;
+            getEmployeeList(response, data);
+        } else {
+            getSingleEmployee(response, data, id);
         }
-        try {
-            employeeService.delete(id);
-        } catch (ServiceException e) {
-            handleError(response, data, 500, e);
-        }
+        data.put("success", true);
         writeResponseData(response, data, HttpServletResponse.SC_OK);
     }
-
 
     private Integer getIdFromPath(String pathInfo) {
         Integer id = null;
@@ -52,9 +47,25 @@ public class DeleteEmployee implements Command {
         }
         return id;
     }
+    private void getEmployeeList(HttpServletResponse response, Map<String, Object> data) throws IOException {
+        try {
+            data.put("employeeList", employeeService.getList(1000, 0));
+        } catch (ServiceException ex) {
+            handleError(response, data, 500, ex);
+        }
+    }
+
+    private void getSingleEmployee(HttpServletResponse response, Map<String, Object> data, int id) throws IOException {
+        try {
+            data.put("employee", employeeService.getById(id));
+        } catch (ServiceException ex) {
+            handleError(response, data, 500, ex);
+        }
+    }
+
 
     @Override
     public boolean isAllowedFor(HttpMethod method) {
-        return method == HttpMethod.DELETE;
+        return method == HttpMethod.GET;
     }
 }

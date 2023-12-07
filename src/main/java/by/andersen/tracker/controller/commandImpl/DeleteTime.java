@@ -5,8 +5,6 @@ import by.andersen.tracker.controller.HttpMethod;
 import by.andersen.tracker.service.ITimeService;
 import by.andersen.tracker.service.ServiceProvider;
 import by.andersen.tracker.service.exception.ServiceException;
-import by.andersen.tracker.service.impl.TimeServiceImpl;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,33 +16,42 @@ public class DeleteTime implements Command {
 
     private final ITimeService timeService = ServiceProvider.getInstance().getTimeService();
 
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map<String, Object> data = new HashMap<>();
-        data.put("message","deleting time");
+        data.put("message", "this is delete time!");
 
-        int id;
-        try {
-            id = Integer.parseInt(request.getParameter("id"));
-        } catch (NumberFormatException ex) {
-            handleError(response, data, 400, ex);
+        Integer id = getIdFromPath(request.getPathInfo());
+
+        if (id == null || id < 0) {
+            handleError(response, data, 400, new Exception("Invalid time id"));
             return;
         }
-
         try {
             timeService.delete(id);
-        } catch (ServiceException ex) {
-            handleError(response, data, 500, ex);
-            return;
+        } catch (ServiceException e) {
+            handleError(response, data, 500, e);
         }
-
         data.put("success", true);
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonData = objectMapper.writeValueAsString(data);
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(jsonData);
-        response.setStatus(HttpServletResponse.SC_OK);
+        writeResponseData(response, data, HttpServletResponse.SC_OK);
+    }
+
+
+    private Integer getIdFromPath(String pathInfo) {
+        Integer id = null;
+        System.out.println("get id from path" + pathInfo);
+        if (pathInfo != null) {
+            String[] pathParts = pathInfo.split("/");
+            if (pathParts.length >= 3) {
+                try {
+                    id = Integer.parseInt(pathParts[2]);
+                } catch (NumberFormatException ignored) {
+
+                }
+            }
+        }
+        return id;
     }
 
     @Override

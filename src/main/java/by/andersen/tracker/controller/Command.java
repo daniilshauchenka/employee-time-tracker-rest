@@ -33,7 +33,14 @@ public interface Command {
                 method == HttpMethod.GET;
     }
 
-
+    default void writeResponseData(HttpServletResponse response, Map<String, Object> data, int code) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonData = objectMapper.writeValueAsString(data);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(jsonData);
+        response.setStatus(code);
+    }
 //  todo need to discuss such solution (using only one ObjectMapper for whole application)
 
 //    default void sendResponse(HttpServletResponse response, Map<String, Object> data, int status) throws IOException {

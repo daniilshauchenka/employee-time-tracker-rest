@@ -2,7 +2,7 @@ package by.andersen.tracker.controller;
 
 import javax.ws.rs.ApplicationPath;
 
-@ApplicationPath("/api")
+@ApplicationPath("/aapi")
 public class RestApplication {
 
 }

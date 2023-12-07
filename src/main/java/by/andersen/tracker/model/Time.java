@@ -32,7 +32,7 @@ public class Time {
     @Column(name = "comment")
     private String comment;
 
-    @Column(name = "isDeleted")
+    @Column(name = "deleted")
     private boolean isDeleted;
 
     public Time(int id, Employee employee, Task task, int timeSpent, LocalDateTime timeStart, LocalDateTime timeEnd, String comment) {
@@ -47,6 +47,14 @@ public class Time {
 
     public Time() {
 
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     public int getId() {
