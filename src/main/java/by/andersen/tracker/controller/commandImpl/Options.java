@@ -6,18 +6,15 @@ import by.andersen.tracker.controller.Command;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-public class Undefined implements Command {
+public class Options implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        System.out.println("undefined");
+        System.out.println("OPTIONS");
         Map<String, Object> data = new HashMap<>();
-        data.put("message", "command not found!");
-        writeResponseData(response,data,400);
+        data.put("message", "hello options!");
+        writeResponseData(response,data,200);
     }
 }

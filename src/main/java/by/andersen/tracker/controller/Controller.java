@@ -1,5 +1,8 @@
 package by.andersen.tracker.controller;
 
+import by.andersen.tracker.controller.commandImpl.Options;
+import by.andersen.tracker.controller.commandImpl.Undefined;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,8 +31,11 @@ public class Controller extends HttpServlet {
         handleRequest(request, response, HttpMethod.GET);
     }
 
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        handleRequest(request, response, HttpMethod.OPTIONS);
+    }
 
-    private void handleRequest(HttpServletRequest request, HttpServletResponse response, HttpMethod httpMethod) throws ServletException, IOException {
+    private void handleRequest(HttpServletRequest request, HttpServletResponse response, HttpMethod httpMethod) throws IOException {
         String pathInfo = request.getPathInfo();
         System.out.println(pathInfo);
         if (pathInfo != null) {
@@ -45,12 +51,14 @@ public class Controller extends HttpServlet {
     }
 
     private Command getCommandForMethod(String entityName, HttpMethod httpMethod) {
-        System.out.println(entityName + " " + httpMethod);
+
         return switch (httpMethod) {
             case POST -> provider.postCommand(entityName);
             case PUT -> provider.putCommand(entityName);
             case DELETE -> provider.deleteCommand(entityName);
-            default -> provider.getCommand(entityName);
+            case GET -> provider.getCommand(entityName);
+            case OPTIONS -> new Options();
+            default -> new Undefined();
         };
     }
 }
