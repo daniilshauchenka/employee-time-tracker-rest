@@ -10,26 +10,26 @@ import java.io.IOException;
 @WebServlet("/api/*")
 public class Controller extends HttpServlet {
 
-    private final CommandProvider2 provider = new CommandProvider2();
+    private final CommandProvider provider = new CommandProvider();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        handleRequest2(request, response, HttpMethod.POST);
+        handleRequest(request, response, HttpMethod.POST);
     }
 
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        handleRequest2(request, response, HttpMethod.PUT);
+        handleRequest(request, response, HttpMethod.PUT);
     }
 
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        handleRequest2(request, response, HttpMethod.DELETE);
+        handleRequest(request, response, HttpMethod.DELETE);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        handleRequest2(request, response, HttpMethod.GET);
+        handleRequest(request, response, HttpMethod.GET);
     }
 
 
-    private void handleRequest2(HttpServletRequest request, HttpServletResponse response, HttpMethod httpMethod) throws ServletException, IOException {
+    private void handleRequest(HttpServletRequest request, HttpServletResponse response, HttpMethod httpMethod) throws ServletException, IOException {
         String pathInfo = request.getPathInfo();
         System.out.println(pathInfo);
         if (pathInfo != null) {
@@ -46,31 +46,11 @@ public class Controller extends HttpServlet {
 
     private Command getCommandForMethod(String entityName, HttpMethod httpMethod) {
         System.out.println(entityName + " " + httpMethod);
-        switch (httpMethod) {
-            case POST:
-                return provider.postCommand(entityName);
-            case PUT:
-                return provider.putCommand(entityName);
-            case DELETE:
-                return provider.deleteCommand(entityName);
-            default:
-                return provider.getCommand(entityName);
-        }
-    }
-
-        private void handleRequest(HttpServletRequest request, HttpServletResponse response, HttpMethod httpMethod) throws ServletException, IOException {
-
-        String pathInfo = request.getPathInfo();
-        System.out.println(pathInfo);
-        if (pathInfo != null) {
-            String[] pathParts = pathInfo.split("/");
-            System.out.println(pathParts.length);
-            if (pathParts.length >= 2) {
-                String entityName = pathParts[1];
-
-                Command command = provider.getCommand(entityName);
-                command.execute(request, response);
-            }
-        }
+        return switch (httpMethod) {
+            case POST -> provider.postCommand(entityName);
+            case PUT -> provider.putCommand(entityName);
+            case DELETE -> provider.deleteCommand(entityName);
+            default -> provider.getCommand(entityName);
+        };
     }
 }

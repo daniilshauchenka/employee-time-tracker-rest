@@ -83,7 +83,6 @@ public class EmployeeDaoImpl implements IEmployeeDao {
 
     @Override
     public List<Employee> getList(int limit, int offset) throws DaoException {
-        System.out.println("get employee list");
         List<Employee> list = new ArrayList<Employee>();
         try (Session session = HibernateConfig.getSession()) {
 

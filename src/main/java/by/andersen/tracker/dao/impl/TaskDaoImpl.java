@@ -3,13 +3,13 @@ package by.andersen.tracker.dao.impl;
 import by.andersen.tracker.dao.ITaskDao;
 import by.andersen.tracker.dao.database.HibernateConfig;
 import by.andersen.tracker.dao.exception.DaoException;
-import by.andersen.tracker.model.Employee;
 import by.andersen.tracker.model.Task;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TaskDaoImpl implements ITaskDao {
@@ -79,6 +79,16 @@ public class TaskDaoImpl implements ITaskDao {
 
     @Override
     public List<Task> getList(int limit, int offset) throws DaoException {
-        return null;
+        List<Task> list;
+        try (Session session = HibernateConfig.getSession()) {
+            Query<Task> query = session.createQuery("from Task t where t.isDeleted=false ORDER BY t.id ASC ", Task.class);
+            query.setFirstResult(offset);
+            query.setMaxResults(limit);
+
+            list = query.getResultList();
+        } catch (HibernateException ex) {
+            throw new DaoException(ex);
+        }
+        return list;
     }
 }

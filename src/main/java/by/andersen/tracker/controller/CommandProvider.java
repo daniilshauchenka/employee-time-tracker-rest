@@ -5,7 +5,7 @@ import by.andersen.tracker.controller.commandImpl.*;
 
 import java.util.HashMap;
 
-public class CommandProvider2 {
+public class CommandProvider {
     public HashMap<String, Command> getCommands = new HashMap<>();
     public HashMap<String, Command> postCommands = new HashMap<>();
     public HashMap<String, Command> putCommands = new HashMap<>();
@@ -40,7 +40,7 @@ public class CommandProvider2 {
     private final static String TIME = "time";
 
 
-    public CommandProvider2() {
+    public CommandProvider() {
         getCommands.put(EMPLOYEE, new GetEmployee());
         postCommands.put(EMPLOYEE, new PostEmployee());
         putCommands.put(EMPLOYEE, new PutEmployee());

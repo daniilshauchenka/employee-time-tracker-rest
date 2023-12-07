@@ -36,6 +36,8 @@ public interface Command {
     default void writeResponseData(HttpServletResponse response, Map<String, Object> data, int code) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonData = objectMapper.writeValueAsString(data);
+        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+      //  response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(jsonData);
