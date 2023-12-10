@@ -18,7 +18,7 @@ public class HibernateConfig {
         try {
             Configuration configuration = new Configuration();
             Properties prop = new Properties();
-            prop.setProperty("hibernate.connection.url", "jdbc:mysql://34.116.137.132:3306/trackerDB");
+            prop.setProperty("hibernate.connection.url", "jdbc:mysql://34.118.53.210:3306/trackerDB");
             prop.setProperty("hibernate.connection.username", "dev");
             prop.setProperty("hibernate.connection.password", "!1Aarootroot");
             prop.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
