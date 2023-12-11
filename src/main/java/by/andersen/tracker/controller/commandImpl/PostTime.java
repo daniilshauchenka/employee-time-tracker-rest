@@ -19,11 +19,13 @@ public class PostTime implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        System.out.println("post time");
         Map<String, Object> data = new HashMap<>();
-        data.put("message", "this is add task!");
+        data.put("message", "this is add time!");
         ObjectMapper objectMapper = new ObjectMapper();
-        Time time = objectMapper.readValue(request.getInputStream(), Time.class);
 
+        Time time = objectMapper.readValue(request.getInputStream(), Time.class);
+        System.out.println(time);
         try {
             timeService.add(time);
         } catch (ServiceException ex) {

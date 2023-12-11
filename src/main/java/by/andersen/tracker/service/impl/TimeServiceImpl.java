@@ -1,8 +1,12 @@
 package by.andersen.tracker.service.impl;
 
 import by.andersen.tracker.dao.DaoProvider;
+import by.andersen.tracker.dao.IEmployeeDao;
+import by.andersen.tracker.dao.ITaskDao;
 import by.andersen.tracker.dao.ITimeDao;
 import by.andersen.tracker.dao.exception.DaoException;
+import by.andersen.tracker.model.Employee;
+import by.andersen.tracker.model.Task;
 import by.andersen.tracker.model.Time;
 import by.andersen.tracker.service.ITimeService;
 import by.andersen.tracker.service.exception.ServiceException;
@@ -13,6 +17,8 @@ import java.util.Map;
 public class TimeServiceImpl implements ITimeService {
 
     ITimeDao timeDao = DaoProvider.getInstance().getTimeDao();
+    IEmployeeDao employeeDao = DaoProvider.getInstance().getEmployeeDao();
+    ITaskDao taskDao = DaoProvider.getInstance().getTaskDao();
 
     @Override
     public void add(Time time) throws ServiceException {
@@ -41,23 +47,25 @@ public class TimeServiceImpl implements ITimeService {
         }
     }
 
-    @Override
-    public Time getById(int id) throws ServiceException {
-        try {
-            return timeDao.getById(id);
-        } catch (DaoException ex) {
-            throw new ServiceException(ex);
-        }
-    }
+//    @Override
+//    public Time getById(int id) throws ServiceException {
+//        try {
+//            Time time =  timeDao.getById(id);
+//
+//            return time;
+//        } catch (DaoException ex) {
+//            throw new ServiceException(ex);
+//        }
+//    }
 
-    @Override
-    public List<Time> getList(int limit, int offset) throws ServiceException {
-        try {
-            return timeDao.getList(limit, offset);
-        } catch (DaoException ex) {
-            throw new ServiceException(ex);
-        }
-    }
+//    @Override
+//    public List<Time> getList(int limit, int offset) throws ServiceException {
+//        try {
+//            return timeDao.getList(limit, offset);
+//        } catch (DaoException ex) {
+//            throw new ServiceException(ex);
+//        }
+//    }
     @Override
     public List<Time> getListWithParams(Map<String, Object> params, int limit, int offset) throws ServiceException {
         try {

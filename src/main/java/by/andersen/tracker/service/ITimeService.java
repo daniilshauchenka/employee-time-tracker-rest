@@ -13,9 +13,9 @@ public interface ITimeService {
 
     void delete(int id) throws ServiceException;
 
-    Time getById(int id) throws ServiceException;
-
-    List<Time> getList(int limit, int offset) throws ServiceException;
+//    Time getById(int id) throws ServiceException;
+//
+//    List<Time> getList(int limit, int offset) throws ServiceException;
 
     List<Time> getListWithParams(Map<String, Object> params, int limit, int offset) throws ServiceException;
 }

@@ -10,35 +10,10 @@ public class CommandProvider {
     public HashMap<String, Command> postCommands = new HashMap<>();
     public HashMap<String, Command> putCommands = new HashMap<>();
     public HashMap<String, Command> deleteCommands = new HashMap<>();
-    //used by default
-//    private final static String UNDEFINED = "";
-//
-//    //Employee request parameters
-//    private final static String EMPLOYEE_LIST = "employeeList";
-//    private final static String EMPLOYEE = "employee";
-//    private final static String EMPLOYEE_ADD = "addEmployee";
-//    private final static String EMPLOYEE_EDIT = "editEmployee";
-//    private final static String EMPLOYEE_DELETE = "deleteEmployee";
-//
-//    //Task request parameters
-//    private final static String TASK_LIST = "taskList";
-//    private final static String TASK = "task";
-//    private final static String TASK_ADD = "addTask";
-//    private final static String TASK_EDIT = "editTask";
-//    private final static String TASK_DELETE = "deleteTask";
-//
-//    //Time request parameters
-//    private final static String TIME_LIST = "timeList";
-//    private final static String TIME = "time";
-//    private final static String TIME_ADD = "addTime";
-//    private final static String TIME_EDIT = "editTime";
-//    private final static String TIME_DELETE = "deleteTime";
-
 
     private final static String EMPLOYEE = "employee";
     private final static String TASK = "task";
     private final static String TIME = "time";
-
 
     public CommandProvider() {
         getCommands.put(EMPLOYEE, new GetEmployee());
@@ -55,7 +30,6 @@ public class CommandProvider {
         postCommands.put(TIME, new PostTime());
         putCommands.put(TIME, new PutTime());
         deleteCommands.put(TIME, new DeleteTime());
-
     }
 
     public Command getCommand(String command) {
@@ -75,39 +49,5 @@ public class CommandProvider {
     }
 
 
-//    public CommandProvider2() {
-//
-//        employeeCommands.put(HttpMethod.GET, new GetEmployee());
-//        employeeCommands.put(HttpMethod.PUT, new PutEmployee());
-//        employeeCommands.put(HttpMethod.POST, new PutEmployee());
-//        employeeCommands.put(HttpMethod.DELETE, new DeleteEmployee());
-
-//        taskCommands.put(TASK_LIST, new GetTaskList());
-//        taskCommands.put(TASK, new GetSingleTask());
-//        taskCommands.put(TASK_ADD, new AddTask());
-//        taskCommands.put(TASK_EDIT, new EditTask());
-//        taskCommands.put(TASK_DELETE, new DeleteTask());
-//
-//        timeCommands.put(TIME_LIST, new GetTimeList());
-//        timeCommands.put(TIME, new GetSingleTime());
-//        timeCommands.put(TIME_ADD, new AddTime());
-//        timeCommands.put(TIME_EDIT, new EditTime());
-//        timeCommands.put(TIME_DELETE, new DeleteTime());
-//    }
-
-//    public Command fetchCommand(String entityName) {
-//        System.out.println(entityName );
-//        HashMap<HttpMethod, Command> selectedCommands = commandMap.getOrDefault(entityName, new HashMap<>());
-//        System.out.println("selecting command");
-//        Command command = selectedCommands.getOrDefault(method, (request, response) -> new Undefined());
-//
-//        return command;
-
-
-//        System.out.println("getting command" );
-//        Command command = commands.getOrDefault(method, (request, response) -> commands.get(UNDEFINED));
-//        System.out.println("got command " + command );
-//        return command.isAllowedFor(method) ? command : commands.get(UNDEFINED);
-//    }
 
 }

@@ -6,7 +6,6 @@ import by.andersen.tracker.dao.exception.DaoException;
 import by.andersen.tracker.model.Time;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import java.time.LocalDateTime;
@@ -42,7 +41,8 @@ public class TimeDaoImpl implements ITimeDao {
     public void delete(int id) throws DaoException {
         try (Session session = HibernateConfig.getSession()) {
             session.beginTransaction();
-            Query<Time> query = session.createQuery("UPDATE  Time t set t.isDeleted = true where  t.id = :id", Time.class);
+            Query query = session.createQuery("UPDATE  Time t set t.isDeleted = true where  t.id = :id");
+            //Query query = session.createQuery("DELETE from Time t where  t.id = :id"  );
             query.setParameter("id", id);
             query.executeUpdate();
             session.getTransaction().commit();
@@ -51,76 +51,12 @@ public class TimeDaoImpl implements ITimeDao {
         }
     }
 
-    @Override
-    public Time getById(int id) throws DaoException {
-        try (Session session = HibernateConfig.getSession()) {
-            session.beginTransaction();
-            Transaction transaction = session.beginTransaction();
-            Time time = session.get(Time.class, id);
-            transaction.commit();
-            return time;
-        } catch (HibernateException ex) {
-            throw new DaoException(ex);
-        }
-    }
-
-    @Override
-    public List<Time> getList(int limit, int offset) throws DaoException {
-        System.out.println("get time list");
-        List<Time> list;
-        try (Session session = HibernateConfig.getSession()) {
-            Query<Time> query = session.createQuery("from Time t where t.isDeleted=false ORDER BY t.timeStart DESC ", Time.class);
-            query.setFirstResult(offset);
-            query.setMaxResults(limit);
-            list = query.getResultList();
-        } catch (HibernateException ex) {
-            throw new DaoException(ex);
-        }
-        return list;
-    }
-
-//    public List<Time> getListWithParams(Map<String, Object> params, int limit, int offset) throws DaoException {
-//        List<Time> list;
-//        try (Session session = HibernateConfig.getSession()) {
-//            StringBuilder queryString = new StringBuilder("from Time t where t.isDeleted=false");
-//
-//            if (params != null && !params.isEmpty()) {
-//                for (Map.Entry<String, Object> entry : params.entrySet()) {
-//
-//                    if (entry.getKey().equals("timeStart")) {
-//                        queryString.append(" and t.timeStart >= :timeStart");
-//                    } else if (entry.getKey().equals("timeEnd")) {
-//                        queryString.append(" and t.timeEnd <= :timeEnd");
-//                    } else {
-//                        queryString.append(" and t.").append(entry.getKey()).append(" = :").append(entry.getKey());
-//                    }
-//                }
-//            }
-//
-//            queryString.append(" ORDER BY t.timeStart DESC");
-//
-//            Query<Time> query = session.createQuery(queryString.toString(), Time.class);
-//
-//            if (params != null && !params.isEmpty()) {
-//                for (Map.Entry<String, Object> entry : params.entrySet()) {
-//                    query.setParameter(entry.getKey(), entry.getValue());
-//                }
-//            }
-//
-//            query.setFirstResult(offset);
-//            query.setMaxResults(limit);
-//            list = query.getResultList();
-//        } catch (HibernateException ex) {
-//            throw new DaoException(ex);
-//        }
-//        return list;
-//    }
 
 
     public List<Time> getListWithParams(Map<String, Object> params, int limit, int offset) throws DaoException {
         List<Time> list;
         try (Session session = HibernateConfig.getSession()) {
-            StringBuilder queryString = new StringBuilder("from Time t where t.isDeleted = false");
+            StringBuilder queryString = new StringBuilder("from Time t LEFT JOIN FETCH t.employee LEFT JOIN FETCH t.task where t.isDeleted = false");
 
             if (params != null && params.containsKey("timeStart")) {
                 queryString.append(" and t.timeStart >= :timeStart");
@@ -141,14 +77,16 @@ public class TimeDaoImpl implements ITimeDao {
                 params.put("employeeId", employeeId);
             }
 
-            // Дополнительные условия для других параметров, если есть
-            // ...
+            if (params != null && params.containsKey("id")) {
+                queryString.append(" and t.id = :id");
+                int id = Integer.parseInt(params.get("id").toString());
+                params.put("id", id);
+            }
 
             queryString.append(" ORDER BY t.timeStart DESC");
 
             Query<Time> query = session.createQuery(queryString.toString(), Time.class);
 
-            // Установка параметров запроса Hibernate для времени начала, окончания и employeeId
             for (Map.Entry<String, Object> entry : params.entrySet()) {
                 query.setParameter(entry.getKey(), entry.getValue());
             }
@@ -161,45 +99,4 @@ public class TimeDaoImpl implements ITimeDao {
         }
         return list;
     }
-//    public List<Time> getListWithParams(Map<String, Object> params, int limit, int offset) throws DaoException {
-//        List<Time> list;
-//        try (Session session = HibernateConfig.getSession()) {
-//            StringBuilder queryString = new StringBuilder("from Time t where t.isDeleted = false");
-//
-//            if (params != null && !params.isEmpty()) {
-//                for (Map.Entry<String, Object> entry : params.entrySet()) {
-//                    queryString.append(" and ");
-//
-//                    switch (entry.getKey()) {
-//                        case "timeStart" -> queryString.append("t.timeStart >= :timeStart");
-//                        case "timeEnd" -> queryString.append("t.timeEnd <= :timeEnd");
-//                        case "employeeId" -> queryString.append("t.employee.id = :employeeId");
-//                        default -> queryString.append("t.").append(entry.getKey()).append(" = :").append(entry.getKey());
-//                    }
-//                }
-//            }
-//
-//            queryString.append(" ORDER BY t.timeStart DESC");
-//
-//            Query<Time> query = session.createQuery(queryString.toString(), Time.class);
-////todo wtf
-//            if (params != null && !params.isEmpty()) {
-//                for (Map.Entry<String, Object> entry : params.entrySet()) {
-//                    if (entry.getKey().equals("employeeId") && entry.getValue() instanceof String) {
-//                        query.setParameter(entry.getKey(), Integer.parseInt(entry.getValue().toString()));
-//                    } else {
-//                        query.setParameter(entry.getKey(), entry.getValue());
-//                    }
-//                }
-//            }
-//
-//            query.setFirstResult(offset);
-//            query.setMaxResults(limit);
-//            list = query.getResultList();
-//        } catch (HibernateException ex) {
-//            throw new DaoException(ex);
-//        }
-//        return list;
-//    }
-
 }

@@ -14,9 +14,9 @@ public interface ITimeDao {
 
     void delete(int id) throws DaoException;
 
-    Time getById(int id) throws DaoException;
+   // Time getById(int id) throws DaoException;
 
-    List<Time> getList(int limit, int offset) throws DaoException;
+ //   List<Time> getList(int limit, int offset) throws DaoException;
 
     List<Time> getListWithParams(Map<String, Object> params, int limit, int offset) throws DaoException;
 }
