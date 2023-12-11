@@ -23,14 +23,12 @@ public class PostTask implements Command {
         data.put("message", "this is add task!");
         ObjectMapper objectMapper = new ObjectMapper();
         Task task = objectMapper.readValue(request.getInputStream(), Task.class);
-
         try {
             taskService.add(task);
         } catch (ServiceException ex) {
             handleError(response, data, 500, ex);
             return;
         }
-
         data.put("success", true);
         writeResponseData(response, data, HttpServletResponse.SC_OK);
     }

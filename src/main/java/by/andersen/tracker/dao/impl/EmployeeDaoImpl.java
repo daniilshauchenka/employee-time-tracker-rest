@@ -7,11 +7,9 @@ import by.andersen.tracker.model.Employee;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class EmployeeDaoImpl implements IEmployeeDao {
 
@@ -41,10 +39,8 @@ public class EmployeeDaoImpl implements IEmployeeDao {
                 existingEmployee.setSurname(employee.getSurname());
                 existingEmployee.setLogin(employee.getLogin());
                 existingEmployee.setPassword(employee.getPassword());
-                //////////////////
                 session.update(existingEmployee);
             }
-
             session.getTransaction().commit();
         } catch (HibernateException ex) {
             throw new DaoException(ex);
@@ -55,43 +51,37 @@ public class EmployeeDaoImpl implements IEmployeeDao {
     public void delete(int id) throws DaoException {
         try (Session session = HibernateConfig.getSession()) {
             session.beginTransaction();
-            Query<Employee> query = session.createQuery("UPDATE Employee e SET e.isDeleted = true WHERE e.id = :deletingId", Employee.class);
-            query.setParameter("deletingId", id);
+            Query query = session.createQuery("UPDATE Employee e SET e.isDeleted = true WHERE e.id = :id");
+            query.setParameter("id", id);
             int rowCount = query.executeUpdate();
             session.getTransaction().commit();
         } catch (HibernateException ex) {
             throw new DaoException(ex);
         }
     }
-
-    @Override
-    public Employee getById(int id) throws DaoException {
-        Employee employee;
-        Transaction transaction = null;
+    public List<Employee> getByParams(Map<String, Object> params, int limit, int offset) throws DaoException {
+        List<Employee> list;
         try (Session session = HibernateConfig.getSession()) {
-            transaction = session.beginTransaction();
-            employee = session.get(Employee.class, id);
-            transaction.commit();
-        } catch (HibernateException ex) {
-            if (transaction != null) {
-                transaction.rollback();
+            StringBuilder queryString = new StringBuilder("from Employee e  where e.isDeleted = false");
+
+            if (params != null && params.containsKey("id")) {
+                queryString.append(" and e.id = :id");
+                int id = Integer.parseInt(params.get("id").toString());
+                params.put("id", id);
             }
-            throw new DaoException(ex);
-        }
-        return employee;
-    }
 
-    @Override
-    public List<Employee> getList(int limit, int offset) throws DaoException {
-        List<Employee> list = new ArrayList<Employee>();
-        try (Session session = HibernateConfig.getSession()) {
+            queryString.append(" ORDER BY e.id ASC");
 
-            Query<Employee> query = session.createQuery("from Employee e where e.isDeleted=false ORDER BY e.id ASC ", Employee.class);
+            Query<Employee> query = session.createQuery(queryString.toString(), Employee.class);
+
+            for (Map.Entry<String, Object> entry : params.entrySet()) {
+                query.setParameter(entry.getKey(), entry.getValue());
+            }
+
             query.setFirstResult(offset);
             query.setMaxResults(limit);
-
             list = query.getResultList();
-        } catch (HibernateException ex) {
+        } catch (HibernateException | NumberFormatException ex) {
             throw new DaoException(ex);
         }
         return list;

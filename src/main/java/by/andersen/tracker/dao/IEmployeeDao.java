@@ -2,8 +2,10 @@ package by.andersen.tracker.dao;
 
 import by.andersen.tracker.dao.exception.DaoException;
 import by.andersen.tracker.model.Employee;
+import by.andersen.tracker.model.Time;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IEmployeeDao {
     void add(Employee employee) throws DaoException;
@@ -12,7 +14,5 @@ public interface IEmployeeDao {
 
     void delete(int id) throws DaoException;
 
-    Employee getById(int id) throws DaoException;
-
-    List<Employee> getList(int limit, int offset) throws DaoException;
+    List<Employee> getByParams(Map<String, Object> params, int limit, int offset) throws DaoException;
 }

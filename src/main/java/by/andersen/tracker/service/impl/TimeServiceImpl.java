@@ -5,8 +5,6 @@ import by.andersen.tracker.dao.IEmployeeDao;
 import by.andersen.tracker.dao.ITaskDao;
 import by.andersen.tracker.dao.ITimeDao;
 import by.andersen.tracker.dao.exception.DaoException;
-import by.andersen.tracker.model.Employee;
-import by.andersen.tracker.model.Task;
 import by.andersen.tracker.model.Time;
 import by.andersen.tracker.service.ITimeService;
 import by.andersen.tracker.service.exception.ServiceException;
@@ -47,29 +45,10 @@ public class TimeServiceImpl implements ITimeService {
         }
     }
 
-//    @Override
-//    public Time getById(int id) throws ServiceException {
-//        try {
-//            Time time =  timeDao.getById(id);
-//
-//            return time;
-//        } catch (DaoException ex) {
-//            throw new ServiceException(ex);
-//        }
-//    }
-
-//    @Override
-//    public List<Time> getList(int limit, int offset) throws ServiceException {
-//        try {
-//            return timeDao.getList(limit, offset);
-//        } catch (DaoException ex) {
-//            throw new ServiceException(ex);
-//        }
-//    }
     @Override
-    public List<Time> getListWithParams(Map<String, Object> params, int limit, int offset) throws ServiceException {
+    public List<Time> getByParams(Map<String, Object> params, int limit, int offset) throws ServiceException {
         try {
-            return timeDao.getListWithParams(params,limit, offset);
+            return timeDao.getByParams(params,limit, offset);
         } catch (DaoException ex) {
             throw new ServiceException(ex);
         }

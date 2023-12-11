@@ -9,8 +9,11 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class TaskDaoImpl implements ITaskDao {
 
@@ -47,11 +50,10 @@ public class TaskDaoImpl implements ITaskDao {
 
     @Override
     public void delete(int id) throws DaoException {
-        System.err.println("\n\n\nDELETING====\n\n\n");
         try (Session session = HibernateConfig.getSession()) {
             session.beginTransaction();
-            Query query = session.createQuery("UPDATE Task t SET t.isDeleted = true WHERE t.id = :deletingId");
-            query.setParameter("deletingId", id);
+            Query query = session.createQuery("UPDATE Task t SET t.isDeleted = true WHERE t.id = :id");
+            query.setParameter("id", id);
             int rowCount = query.executeUpdate();
             session.getTransaction().commit();
         } catch (HibernateException ex) {
@@ -59,34 +61,29 @@ public class TaskDaoImpl implements ITaskDao {
         }
 
     }
-
-    @Override
-    public Task getById(int id) throws DaoException {
-        Task task = null;
-        Transaction transaction = null;
-        try (Session session = HibernateConfig.getSession()) {
-            transaction = session.beginTransaction();
-            task = session.get(Task.class, id);
-            transaction.commit();
-        } catch (HibernateException ex) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            throw new DaoException(ex);
-        }
-        return task;
-    }
-
-    @Override
-    public List<Task> getList(int limit, int offset) throws DaoException {
+    public List<Task> getByParams(Map<String, Object> params, int limit, int offset) throws DaoException {
         List<Task> list;
         try (Session session = HibernateConfig.getSession()) {
-            Query<Task> query = session.createQuery("from Task t where t.isDeleted=false ORDER BY t.id ASC ", Task.class);
+            StringBuilder queryString = new StringBuilder("from Task t  where t.isDeleted = false");
+
+            if (params != null && params.containsKey("id")) {
+                queryString.append(" and t.id = :id");
+                int id = Integer.parseInt(params.get("id").toString());
+                params.put("id", id);
+            }
+
+            queryString.append(" ORDER BY t.id ASC");
+
+            Query<Task> query = session.createQuery(queryString.toString(), Task.class);
+
+            for (Map.Entry<String, Object> entry : params.entrySet()) {
+                query.setParameter(entry.getKey(), entry.getValue());
+            }
+
             query.setFirstResult(offset);
             query.setMaxResults(limit);
-
             list = query.getResultList();
-        } catch (HibernateException ex) {
+        } catch (HibernateException | NumberFormatException ex) {
             throw new DaoException(ex);
         }
         return list;

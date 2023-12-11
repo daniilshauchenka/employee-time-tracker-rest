@@ -53,7 +53,7 @@ public class TimeDaoImpl implements ITimeDao {
 
 
 
-    public List<Time> getListWithParams(Map<String, Object> params, int limit, int offset) throws DaoException {
+    public List<Time> getByParams(Map<String, Object> params, int limit, int offset) throws DaoException {
         List<Time> list;
         try (Session session = HibernateConfig.getSession()) {
             StringBuilder queryString = new StringBuilder("from Time t LEFT JOIN FETCH t.employee LEFT JOIN FETCH t.task where t.isDeleted = false");

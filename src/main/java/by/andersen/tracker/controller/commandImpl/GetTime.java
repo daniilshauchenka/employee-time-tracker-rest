@@ -32,10 +32,10 @@ public class GetTime implements Command {
     }
 
 
-    private void getTimeList(HttpServletResponse response, Map<String, Object> data, Map<String, Object> params, int limit, int offset ) throws IOException {
+    private void getTimeList(HttpServletResponse response, Map<String, Object> data, Map<String, Object> params, int limit, int offset) throws IOException {
         try {
             System.out.println(params + " " + limit + " " + offset);
-            data.put("timeList", timeService.getListWithParams(params,limit,offset));
+            data.put("timeList", timeService.getByParams(params, limit, offset));
         } catch (ServiceException ex) {
             handleError(response, data, 500, ex);
         }
@@ -49,9 +49,6 @@ public class GetTime implements Command {
         for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
             String key = entry.getKey();
             String[] values = entry.getValue();
-
-            System.out.println("\n\n\n"+ key + " " + Arrays.toString(values) + "\n\n\n");
-
             if (values.length > 1) {
                 List<String> valueList = Arrays.asList(values);
                 params.put(key, valueList);
@@ -71,7 +68,6 @@ public class GetTime implements Command {
             try {
                 return Integer.parseInt(paramValue);
             } catch (NumberFormatException ignored) {
-                // Можно добавить логгирование или обработку ошибки здесь, если не удалось распарсить значение
             }
         }
         return defaultValue;
