@@ -9,7 +9,9 @@ import by.andersen.tracker.service.exception.ServiceException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GetTask implements Command {
@@ -19,49 +21,51 @@ public class GetTask implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map<String, Object> data = new HashMap<>();
-        data.put("message", "this is get single task!");
+        data.put("message", "This is get time!");
+        Map<String, Object> params = extractParamsFromRequest(request);
+        int limit = getParameterOrDefault(request, "limit", 1000);
+        int offset = getParameterOrDefault(request, "offset", 0);
+        getTaskList(response, data, params, limit, offset);
 
-        Integer id = getIdFromPath(request.getPathInfo());
-
-        if (id == null || id < 0) {
-            getTaskList(response, data);
-        } else {
-            getSingleTask(response, data, id);
-        }
         data.put("success", true);
         writeResponseData(response, data, HttpServletResponse.SC_OK);
     }
 
-    private Integer getIdFromPath(String pathInfo) {
-        Integer id = null;
-        System.out.println("get id from path" + pathInfo);
-        if (pathInfo != null) {
-            String[] pathParts = pathInfo.split("/");
-            if (pathParts.length >= 3) {
-                try {
-                    id = Integer.parseInt(pathParts[2]);
-                } catch (NumberFormatException ignored) {
+    private void getTaskList(HttpServletResponse response, Map<String, Object> data, Map<String, Object> params, int limit, int offset) throws IOException {
+        try {
+            System.out.println(params + " " + limit + " " + offset);
+            data.put("taskList", taskService.getByParams(params, limit, offset));
+        } catch (ServiceException ex) {
+            handleError(response, data, 500, ex);
+        }
+    }
 
-                }
+    private Map<String, Object> extractParamsFromRequest(HttpServletRequest request) {
+        Map<String, Object> params = new HashMap<>();
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
+            String key = entry.getKey();
+            String[] values = entry.getValue();
+            if (values.length > 1) {
+                List<String> valueList = Arrays.asList(values);
+                params.put(key, valueList);
+            } else {
+
+                params.put(key, values[0]);
             }
         }
-        return id;
+        return params;
     }
 
-    private void getTaskList(HttpServletResponse response, Map<String, Object> data) throws IOException {
-        try {
-            data.put("taskList", taskService.getList(1000, 0));
-        } catch (ServiceException ex) {
-            handleError(response, data, 500, ex);
+    private int getParameterOrDefault(HttpServletRequest request, String paramName, int defaultValue) {
+        String paramValue = request.getParameter(paramName);
+        if (paramValue != null && !paramValue.isEmpty()) {
+            try {
+                return Integer.parseInt(paramValue);
+            } catch (NumberFormatException ignored) {
+            }
         }
-    }
-
-    private void getSingleTask(HttpServletResponse response, Map<String, Object> data, int id) throws IOException {
-        try {
-            data.put("task", taskService.getById(id));
-        } catch (ServiceException ex) {
-            handleError(response, data, 500, ex);
-        }
+        return defaultValue;
     }
 
 

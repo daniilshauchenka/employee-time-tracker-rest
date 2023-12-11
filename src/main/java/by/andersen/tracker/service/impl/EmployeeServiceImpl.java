@@ -8,6 +8,7 @@ import by.andersen.tracker.service.IEmployeeService;
 import by.andersen.tracker.service.exception.ServiceException;
 
 import java.util.List;
+import java.util.Map;
 
 public class EmployeeServiceImpl implements IEmployeeService {
     IEmployeeDao employeeDao = DaoProvider.getInstance().getEmployeeDao();
@@ -40,19 +41,9 @@ public class EmployeeServiceImpl implements IEmployeeService {
     }
 
     @Override
-    public Employee getById(int id) throws ServiceException {
+    public List<Employee> getByParams(Map<String, Object> params, int limit, int offset) throws ServiceException {
         try {
-            System.out.println("get by id service " + id);
-            return employeeDao.getById(id);
-        } catch (DaoException ex) {
-            throw new ServiceException(ex);
-        }
-    }
-
-    @Override
-    public List<Employee> getList(int limit, int offset) throws ServiceException {
-        try {
-            return employeeDao.getList(limit, offset);
+            return employeeDao.getByParams(params,limit, offset);
         } catch (DaoException ex) {
             throw new ServiceException(ex);
         }

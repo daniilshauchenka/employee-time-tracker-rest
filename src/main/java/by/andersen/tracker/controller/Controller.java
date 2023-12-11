@@ -43,7 +43,7 @@ public class Controller extends HttpServlet {
             System.out.println(pathParts.length);
             if (pathParts.length >= 1) {
                 String entityName = pathParts[1];
-                System.out.println("entity name =====" + entityName);
+                System.out.println(httpMethod+" entity name " + entityName);
                 Command command = getCommandForMethod(entityName, httpMethod);
                 command.execute(request, response);
             }

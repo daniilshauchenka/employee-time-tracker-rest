@@ -1,5 +1,10 @@
 package by.andersen.tracker.model;
 
+import by.andersen.tracker.util.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -11,21 +16,25 @@ public class Time {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
+    @Column(name = "employee_id")
+    private int employeeId;
 
-    @ManyToOne
-    @JoinColumn(name = "employee_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id", insertable = false, updatable = false)
     private Employee employee;
 
-    @ManyToOne
-    @JoinColumn(name = "task_id")
+    @Column(name = "task_id")
+    private int taskId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "task_id", insertable = false, updatable = false)
     private Task task;
 
-    @Column(name = "time_spent")
-    private int timeSpent;
-
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @Column(name = "time_start")
     private LocalDateTime timeStart;
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @Column(name = "time_end")
     private LocalDateTime timeEnd;
 
@@ -35,19 +44,31 @@ public class Time {
     @Column(name = "deleted")
     private boolean isDeleted;
 
-    public Time(int id, Employee employee, Task task, int timeSpent, LocalDateTime timeStart, LocalDateTime timeEnd, String comment) {
-        this.id = id;
-        this.employee = employee;
-        this.task = task;
-        this.timeSpent = timeSpent;
-        this.timeStart = timeStart;
-        this.timeEnd = timeEnd;
-        this.comment = comment;
-    }
-
     public Time() {
-
     }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+        if (employee != null) {
+            this.employeeId = employee.getId();
+        }
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
+        if (task != null) {
+            this.taskId = task.getId();
+        }
+    }
+
 
     public boolean isDeleted() {
         return isDeleted;
@@ -65,28 +86,46 @@ public class Time {
         this.id = id;
     }
 
-    public Employee getEmployee() {
-        return employee;
+    @Override
+    public String toString() {
+        return "Time{" +
+                "id=" + id +
+                ", employeeId=" + employeeId +
+                ", task=" + taskId +
+                ", timeStart=" + timeStart +
+                ", timeEnd=" + timeEnd +
+                ", comment='" + comment + '\'' +
+                ", isDeleted=" + isDeleted +
+                '}';
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Time time = (Time) o;
+        return id == time.id && employeeId == time.employeeId && taskId == time.taskId && isDeleted == time.isDeleted && Objects.equals(timeStart, time.timeStart) && Objects.equals(timeEnd, time.timeEnd) && Objects.equals(comment, time.comment);
     }
 
-    public Task getTask() {
-        return task;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, employeeId, taskId, timeStart, timeEnd, comment, isDeleted);
     }
 
-    public void setTask(Task task) {
-        this.task = task;
+    public int getEmployeeId() {
+        return employeeId;
     }
 
-    public int getTimeSpent() {
-        return timeSpent;
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
     }
 
-    public void setTimeSpent(int timeSpent) {
-        this.timeSpent = timeSpent;
+    public int getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(int task) {
+        this.taskId = task;
     }
 
     public LocalDateTime getTimeStart() {
@@ -111,31 +150,5 @@ public class Time {
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Time time = (Time) o;
-        return id == time.id && timeSpent == time.timeSpent && Objects.equals(employee, time.employee) && Objects.equals(task, time.task) && Objects.equals(timeStart, time.timeStart) && Objects.equals(timeEnd, time.timeEnd) && Objects.equals(comment, time.comment);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, employee, task, timeSpent, timeStart, timeEnd, comment);
-    }
-
-    @Override
-    public String toString() {
-        return "Time{" +
-                "id=" + id +
-                ", employee=" + employee +
-                ", task=" + task +
-                ", timeSpent=" + timeSpent +
-                ", timeStart=" + timeStart +
-                ", timeEnd=" + timeEnd +
-                ", comment='" + comment + '\'' +
-                '}';
     }
 }

@@ -23,14 +23,12 @@ public class PostEmployee implements Command {
         data.put("message", "this is add employee!");
         ObjectMapper objectMapper = new ObjectMapper();
         Employee employee = objectMapper.readValue(request.getInputStream(), Employee.class);
-
         try {
             employeeService.add(employee);
         } catch (ServiceException ex) {
             handleError(response, data, 500, ex);
             return;
         }
-
         data.put("success", true);
         writeResponseData(response, data, HttpServletResponse.SC_OK);
     }

@@ -18,12 +18,18 @@ public class HibernateConfig {
         try {
             Configuration configuration = new Configuration();
             Properties prop = new Properties();
+<<<<<<< HEAD
             prop.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/timetracker");
             prop.setProperty("hibernate.connection.username", "root");
             prop.setProperty("hibernate.connection.password", "guddu234");
+=======
+            prop.setProperty("hibernate.connection.url", "jdbc:mysql://34.118.53.210:3306/trackerDB");
+            prop.setProperty("hibernate.connection.username", "dev");
+            prop.setProperty("hibernate.connection.password", "!1Aarootroot");
+>>>>>>> 2a5de56617162e10173fe574ca35e5e6a4376e4e
             prop.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
             prop.setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
-            prop.setProperty(Environment.SHOW_SQL, "true");
+          //  prop.setProperty(Environment.SHOW_SQL, "true");
             configuration.setProperties(prop);
             configuration.addAnnotatedClass(Employee.class);
             configuration.addAnnotatedClass(Task.class);

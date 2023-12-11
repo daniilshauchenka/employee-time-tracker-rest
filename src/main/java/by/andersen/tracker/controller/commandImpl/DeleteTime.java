@@ -21,17 +21,18 @@ public class DeleteTime implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map<String, Object> data = new HashMap<>();
         data.put("message", "this is delete time!");
+        int id=0;
+        try{
+             id = Integer.parseInt(request.getParameter("id"));
 
-        Integer id = getIdFromPath(request.getPathInfo());
-
-        if (id == null || id < 0) {
-            handleError(response, data, 400, new Exception("Invalid time id"));
-            return;
+        } catch(NumberFormatException ex) {
+           handleError(response, data, 500, ex);
         }
+
         try {
             timeService.delete(id);
-        } catch (ServiceException e) {
-            handleError(response, data, 500, e);
+        } catch (ServiceException ex) {
+            handleError(response, data, 500, ex);
         }
         data.put("success", true);
         writeResponseData(response, data, HttpServletResponse.SC_OK);

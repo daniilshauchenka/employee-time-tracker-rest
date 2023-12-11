@@ -8,6 +8,7 @@ import by.andersen.tracker.service.ITaskService;
 import by.andersen.tracker.service.exception.ServiceException;
 
 import java.util.List;
+import java.util.Map;
 
 public class TaskServiceImpl implements ITaskService {
     ITaskDao taskDao = DaoProvider.getInstance().getTaskDao();
@@ -40,18 +41,9 @@ public class TaskServiceImpl implements ITaskService {
     }
 
     @Override
-    public Task getById(int id) throws ServiceException {
+    public List<Task> getByParams(Map<String, Object> params, int limit, int offset) throws ServiceException {
         try {
-            return taskDao.getById(id);
-        } catch (DaoException ex) {
-            throw new ServiceException(ex);
-        }
-    }
-
-    @Override
-    public List<Task> getList(int limit, int offset) throws ServiceException {
-        try {
-            return taskDao.getList(limit, offset);
+            return taskDao.getByParams(params,limit, offset);
         } catch (DaoException ex) {
             throw new ServiceException(ex);
         }

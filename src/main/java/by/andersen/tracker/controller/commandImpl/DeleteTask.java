@@ -21,37 +21,21 @@ public class DeleteTask implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map<String, Object> data = new HashMap<>();
         data.put("message", "this is delete task!");
+        int id=0;
+        try{
+            id = Integer.parseInt(request.getParameter("id"));
 
-        Integer id = getIdFromPath(request.getPathInfo());
-
-        if (id == null || id < 0) {
-            handleError(response, data, 400, new Exception("Invalid task id"));
-            return;
+        } catch(NumberFormatException ex) {
+            handleError(response, data, 500, ex);
         }
+
         try {
             taskService.delete(id);
-        } catch (ServiceException e) {
-            handleError(response, data, 500, e);
+        } catch (ServiceException ex) {
+            handleError(response, data, 500, ex);
         }
         data.put("success", true);
         writeResponseData(response, data, HttpServletResponse.SC_OK);
-    }
-
-
-    private Integer getIdFromPath(String pathInfo) {
-        Integer id = null;
-        System.out.println("get id from path" + pathInfo);
-        if (pathInfo != null) {
-            String[] pathParts = pathInfo.split("/");
-            if (pathParts.length >= 3) {
-                try {
-                    id = Integer.parseInt(pathParts[2]);
-                } catch (NumberFormatException ignored) {
-
-                }
-            }
-        }
-        return id;
     }
 
     @Override
