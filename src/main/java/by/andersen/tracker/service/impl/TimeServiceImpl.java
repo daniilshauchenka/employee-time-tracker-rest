@@ -8,6 +8,7 @@ import by.andersen.tracker.service.ITimeService;
 import by.andersen.tracker.service.exception.ServiceException;
 
 import java.util.List;
+import java.util.Map;
 
 public class TimeServiceImpl implements ITimeService {
 
@@ -53,6 +54,14 @@ public class TimeServiceImpl implements ITimeService {
     public List<Time> getList(int limit, int offset) throws ServiceException {
         try {
             return timeDao.getList(limit, offset);
+        } catch (DaoException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+    @Override
+    public List<Time> getListWithParams(Map<String, Object> params, int limit, int offset) throws ServiceException {
+        try {
+            return timeDao.getListWithParams(params,limit, offset);
         } catch (DaoException ex) {
             throw new ServiceException(ex);
         }
